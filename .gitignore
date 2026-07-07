@@ -1,18 +1,26 @@
-# Virtual environment
+# Virtual Environment
+.venv/
 venv/
 
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+
+# macOS
+.DS_Store
 
 # VS Code
 .vscode/
 
-# Jupyter
-.ipynb_checkpoints/
+# Logs
+logs/
+*.log
 
-# Environment files
+# Environment
 .env
+
+# Database
+*.db
 
 # Ignore datasets
 data/raw/*
