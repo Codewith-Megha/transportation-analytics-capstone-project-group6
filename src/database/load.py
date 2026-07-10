@@ -1,73 +1,47 @@
 import pandas as pd
-import psycopg2
-from io import StringIO
-
-# ----------------------------
-# PostgreSQL Configuration
-# ----------------------------
-DB_NAME = "transportation_analytics"
-DB_USER = "postgres"
-DB_PASSWORD = "Megha123"
-DB_HOST = "localhost"
-DB_PORT = "5432"
-
-# ----------------------------
-# Read processed dataset
-# ----------------------------
-print("Loading dataset...")
-
-df = pd.read_parquet(
-    "data/processed/yellow_tripdata_features.parquet"
+from sqlalchemy.exc import SQLAlchemyError
+from src.database.database import engine
+from src.database.schema import (
+    YELLOW_COLUMNS,
+    GREEN_COLUMNS,
+    FHV_COLUMNS
 )
 
-print(f"Rows Loaded: {len(df):,}")
+TABLE_MAPPING = {
+    "yellow": "yellow_trips",
+    "green": "green_trips",
+    "fhv": "fhv_trips"
+}
 
-# ----------------------------
-# Connect to PostgreSQL
-# ----------------------------
-print("Connecting to PostgreSQL...")
+COLUMN_MAPPING = {
+    "yellow": YELLOW_COLUMNS,
+    "green": GREEN_COLUMNS,
+    "fhv": FHV_COLUMNS
+}
 
-conn = psycopg2.connect(
-    dbname=DB_NAME,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    host=DB_HOST,
-    port=DB_PORT
-)
 
-cursor = conn.cursor()
+def load_dataframe(df: pd.DataFrame, dataset: str):
 
-# ----------------------------
-# Convert dataframe to CSV in memory
-# ----------------------------
-print("Preparing CSV buffer...")
+    table_name = TABLE_MAPPING[dataset]
 
-buffer = StringIO()
+    # Keep only required columns
+    df = df[COLUMN_MAPPING[dataset]]
 
-df.to_csv(
-    buffer,
+    print(f"Loading {len(df):,} rows into {table_name}...")
+
+    from sqlalchemy.exc import SQLAlchemyError
+
+
+
+    df.to_sql(
+    table_name,
+    engine,
+    if_exists="append",
     index=False,
-    header=False
-)
+    chunksize=50000,
+    method="multi"
+    )
 
-buffer.seek(0)
+print("Load completed.")
 
-# ----------------------------
-# COPY into PostgreSQL
-# ----------------------------
-print("Uploading data...")
-
-cursor.copy_expert("""
-COPY taxi_trips
-FROM STDIN
-WITH CSV
-""", buffer)
-
-conn.commit()
-
-cursor.close()
-conn.close()
-
-print("=" * 50)
-print("UPLOAD COMPLETED SUCCESSFULLY!")
-print("=" * 50)
+    

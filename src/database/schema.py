@@ -1,0 +1,63 @@
+YELLOW_COLUMNS = [
+    "vendor_id",
+    "pickup_datetime",
+    "dropoff_datetime",
+    "passenger_count",
+    "trip_distance",
+    "ratecode_id",
+    "pulocationid",
+    "dolocationid",
+    "payment_type",
+    "fare_amount",
+    "total_amount",
+    "trip_duration_minutes",
+    "pickup_hour",
+    "pickup_day",
+    "pickup_month",
+    "pickup_weekday",
+    "is_weekend",
+    "rush_hour",
+    "average_speed_mph",
+    "trip_category",
+    "dataset"
+]
+
+GREEN_COLUMNS = [
+    "vendor_id",
+    "pickup_datetime",
+    "dropoff_datetime",
+    "passenger_count",
+    "trip_distance",
+    "pulocationid",
+    "dolocationid",
+    "payment_type",
+    "fare_amount",
+    "total_amount",
+    "trip_duration_minutes",
+    "pickup_hour",
+    "pickup_day",
+    "pickup_month",
+    "pickup_weekday",
+    "is_weekend",
+    "rush_hour",
+    "average_speed_mph",
+    "trip_category",
+    "dataset"
+]
+
+FHV_COLUMNS = [
+    "dispatching_base_num",
+    "pickup_datetime",
+    "dropoff_datetime",
+    "pulocationid",
+    "dolocationid",
+    "affiliated_base_number",
+    "trip_duration_minutes",
+    "pickup_hour",
+    "pickup_day",
+    "pickup_month",
+    "pickup_weekday",
+    "is_weekend",
+    "rush_hour",
+    "dataset"
+]

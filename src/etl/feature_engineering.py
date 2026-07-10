@@ -45,8 +45,10 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
 
         hours = df["trip_duration_minutes"] / 60
 
+        hours = (df["trip_duration_minutes"] / 60).replace(0, pd.NA)
+
         df["average_speed_mph"] = (
-            df["trip_distance"] / hours
+        df["trip_distance"] / hours
         ).fillna(0)
 
         df["average_speed_mph"] = (

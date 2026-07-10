@@ -31,3 +31,5 @@ data/processed/*
 !data/raw/.gitkeep
 !data/cleaned/.gitkeep
 !data/processed/.gitkeep
+
+config/config.py

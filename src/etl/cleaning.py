@@ -53,6 +53,13 @@ def clean_dataset(df: pd.DataFrame, dataset: str) -> pd.DataFrame:
 
         df = df[df["trip_duration_minutes"] > 0]
 
+    if "pickup_datetime" in df.columns:
+
+        df = df[
+            (df["pickup_datetime"] >= "2026-01-01") &
+            (df["pickup_datetime"] < "2026-06-01")
+    ]
+
     # ---------------------------------------------------
     # Yellow Taxi Cleaning
     # ---------------------------------------------------
@@ -61,7 +68,7 @@ def clean_dataset(df: pd.DataFrame, dataset: str) -> pd.DataFrame:
         if "passenger_count" in df.columns:
             df["passenger_count"] = df["passenger_count"].fillna(1)
 
-        df["RatecodeID"] = df["RatecodeID"].fillna(1)
+        df["ratecode_id"] = df["ratecode_id"].fillna(1)
 
         df["store_and_fwd_flag"] = (
             df["store_and_fwd_flag"]
@@ -73,8 +80,8 @@ def clean_dataset(df: pd.DataFrame, dataset: str) -> pd.DataFrame:
             .fillna(0)
         )
 
-        df["Airport_fee"] = (
-            df["Airport_fee"]
+        df["airport_fee"] = (
+            df["airport_fee"]
             .fillna(0)
         )
 
@@ -85,7 +92,7 @@ def clean_dataset(df: pd.DataFrame, dataset: str) -> pd.DataFrame:
 
         df["passenger_count"] = df["passenger_count"].fillna(1)
 
-        df["RatecodeID"] = df["RatecodeID"].fillna(1)
+        df["ratecode_id"] = df["ratecode_id"].fillna(1)
 
         df["store_and_fwd_flag"] = (
             df["store_and_fwd_flag"]
@@ -118,14 +125,15 @@ def clean_dataset(df: pd.DataFrame, dataset: str) -> pd.DataFrame:
 
         # Remove rows where BOTH locations are missing
         df = df.dropna(
-            subset=["PULocationID", "DOLocationID"],
+            subset=["pulocationid", "dolocationid"],
             how="all"
         )
 
-        df["Affiliated_base_number"] = (
-            df["Affiliated_base_number"]
+        df["affiliated_base_number"] = (
+            df["affiliated_base_number"]
             .fillna("Unknown")
         )
+        
 
     # ---------------------------------------------------
     # Summary

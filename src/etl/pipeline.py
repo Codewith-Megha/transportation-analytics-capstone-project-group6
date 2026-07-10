@@ -1,5 +1,6 @@
 import pandas as pd
 
+from src.database.load import load_dataframe
 from src.etl.standardize import standardize_columns
 from src.etl.cleaning import clean_dataset
 from src.etl.feature_engineering import engineer_features
@@ -22,7 +23,11 @@ def process_file(file_path, dataset):
 
     df = engineer_features(df)
 
+    df["dataset"] = dataset
+
     validate_dataframe(df)
+
+    load_dataframe(df, dataset)
 
 
 
