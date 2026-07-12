@@ -335,6 +335,7 @@ Megha Pandey - G25AI1028
 Nikhil Gehlot - G25AI1029
 Nikhil john - G25AI1030
 Md Khatibul Haque - G25AI1027
+Mahesh Dadhich - G25AI1026
 
 M.Tech in Data Engineering  
 Indian Institute of Technology (IIT) Jodhpur
