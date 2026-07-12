@@ -1,10 +1,11 @@
 import sys
 from pathlib import Path
 
-sys.path.append(str(Path(__file__).parent))
-sys.path.append(str(Path(__file__).parent.parent))
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
 import streamlit as st
 
+from dashboard.utils import load_dashboard_data
 st.set_page_config(
     page_title="NYC Transportation Analytics",
     page_icon="🚖",
@@ -12,6 +13,9 @@ st.set_page_config(
 )
 
 st.title("🚖 NYC Transportation Analytics Dashboard")
+
+with st.spinner("Loading dashboard..."):
+    load_dashboard_data()
 
 st.markdown("""
 ### Welcome

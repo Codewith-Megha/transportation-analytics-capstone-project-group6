@@ -1,18 +1,25 @@
 import streamlit as st
 import plotly.express as px
 
-from utils import run_query
-from src.analytics import queries
-
+from utils import load_dashboard_data
 st.set_page_config(layout="wide")
 
 st.title("💰 Revenue Analysis")
 
 # ----------------------------------
-# Monthly Revenue
+# Load Cached Data
 # ----------------------------------
 
-monthly_revenue = run_query(queries.MONTHLY_REVENUE)
+data = load_dashboard_data()
+
+monthly_revenue = data["monthly_revenue"].copy()
+hourly_revenue = data["revenue_by_hour"].copy()
+avg_fare = data["average_fare"].copy()
+avg_speed = data["monthly_average_speed"].copy()
+
+# ----------------------------------
+# Monthly Revenue
+# ----------------------------------
 
 fig1 = px.line(
     monthly_revenue,
@@ -26,8 +33,6 @@ fig1 = px.line(
 # Revenue by Hour
 # ----------------------------------
 
-hourly_revenue = run_query(queries.REVENUE_BY_HOUR)
-
 fig2 = px.bar(
     hourly_revenue,
     x="pickup_hour",
@@ -39,8 +44,6 @@ fig2 = px.bar(
 # Average Fare
 # ----------------------------------
 
-avg_fare = run_query(queries.AVERAGE_FARE)
-
 fig3 = px.bar(
     avg_fare,
     x="pickup_month",
@@ -51,8 +54,6 @@ fig3 = px.bar(
 # ----------------------------------
 # Monthly Average Speed
 # ----------------------------------
-
-avg_speed = run_query(queries.MONTHLY_AVERAGE_SPEED)
 
 fig4 = px.line(
     avg_speed,

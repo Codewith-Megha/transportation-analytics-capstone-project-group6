@@ -1,25 +1,25 @@
 import streamlit as st
+import plotly.express as px
 
-from utils import run_query
-from src.analytics import queries
-
+from utils import load_dashboard_data
 st.set_page_config(layout="wide")
 
 st.title("📊 Overview")
 
 # -------------------------
-# Load KPI Data
+# Load Cached Data
 # -------------------------
 
-total_trips = run_query(queries.TOTAL_TRIPS).iloc[0, 0]
+data = load_dashboard_data()
 
-total_revenue = run_query(queries.TOTAL_REVENUE).iloc[0, 0]
+total_trips = data["total_trips"].iloc[0, 0]
+total_revenue = data["total_revenue"].iloc[0, 0]
+avg_fare = data["avg_fare"].iloc[0, 0]
+avg_distance = data["avg_trip_distance"].iloc[0, 0]
+avg_duration = data["avg_trip_duration"].iloc[0, 0]
 
-avg_fare = run_query(queries.AVERAGE_FARE_OVERALL).iloc[0, 0]
-
-avg_distance = run_query(queries.AVERAGE_TRIP_DISTANCE).iloc[0, 0]
-
-avg_duration = run_query(queries.AVERAGE_TRIP_DURATION).iloc[0, 0]
+monthly_trips = data["monthly_trips"]
+monthly_revenue = data["monthly_revenue"]
 
 # -------------------------
 # KPI Cards
@@ -51,13 +51,10 @@ col5.metric(
     "Average Duration",
     f"{avg_duration:.2f} mins"
 )
-import plotly.express as px
 
 # -------------------------
-# Monthly Trips
+# Charts
 # -------------------------
-
-monthly_trips = run_query(queries.MONTHLY_TRIPS)
 
 fig1 = px.bar(
     monthly_trips,
@@ -65,12 +62,6 @@ fig1 = px.bar(
     y="total_trips",
     title="Monthly Trips"
 )
-
-# -------------------------
-# Monthly Revenue
-# -------------------------
-
-monthly_revenue = run_query(queries.MONTHLY_REVENUE)
 
 fig2 = px.line(
     monthly_revenue,

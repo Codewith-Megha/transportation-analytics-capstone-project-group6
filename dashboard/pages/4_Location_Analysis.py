@@ -1,18 +1,24 @@
 import streamlit as st
 import plotly.express as px
 
-from utils import run_query
-from src.analytics import queries
-
+from utils import load_dashboard_data
 st.set_page_config(layout="wide")
 
 st.title("📍 Location Analysis")
 
 # -----------------------------------
-# Top Pickup Locations
+# Load Cached Data
 # -----------------------------------
 
-pickup = run_query(queries.TOP_PICKUPS)
+data = load_dashboard_data()
+
+pickup = data["pickups"].copy()
+dropoff = data["dropoffs"].copy()
+revenue = data["top_revenue"].copy()
+
+# -----------------------------------
+# Top Pickup Locations
+# -----------------------------------
 
 fig1 = px.bar(
     pickup,
@@ -25,8 +31,6 @@ fig1 = px.bar(
 # Top Dropoff Locations
 # -----------------------------------
 
-dropoff = run_query(queries.TOP_DROPOFFS)
-
 fig2 = px.bar(
     dropoff,
     x="dolocationid",
@@ -38,8 +42,6 @@ fig2 = px.bar(
 # Top Revenue Locations
 # -----------------------------------
 
-revenue = run_query(queries.TOP_REVENUE_LOCATIONS)
-
 fig3 = px.bar(
     revenue,
     x="pulocationid",
@@ -47,10 +49,13 @@ fig3 = px.bar(
     title="Top Revenue Generating Pickup Locations"
 )
 
+# -----------------------------------
+# Display Charts
+# -----------------------------------
+
 left, right = st.columns(2)
 
 left.plotly_chart(fig1, use_container_width=True)
-
 right.plotly_chart(fig2, use_container_width=True)
 
 st.plotly_chart(fig3, use_container_width=True)

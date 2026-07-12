@@ -1,18 +1,27 @@
 import streamlit as st
 import plotly.express as px
+import pandas as pd
 
-from utils import run_query
-from src.analytics import queries
-
+from utils import load_dashboard_data
 st.set_page_config(layout="wide")
 
 st.title("🚕 Dataset Comparison")
 
 # ------------------------------------
-# Dataset Comparison
+# Load Cached Data
 # ------------------------------------
 
-comparison = run_query(queries.DATASET_COMPARISON)
+data = load_dashboard_data()
+
+comparison = data["dataset_comparison"]
+
+yellow = data["monthly_trips"].copy()
+green = data["green"].copy()
+fhv = data["fhv"].copy()
+
+# ------------------------------------
+# Dataset Comparison
+# ------------------------------------
 
 fig1 = px.bar(
     comparison,
@@ -28,29 +37,22 @@ st.plotly_chart(fig1, use_container_width=True)
 # Monthly Comparison
 # ------------------------------------
 
-yellow = run_query(queries.MONTHLY_TRIPS)
 yellow["dataset"] = "Yellow"
-
-green = run_query(queries.GREEN_MONTHLY_TRIPS)
 green["dataset"] = "Green"
-
-fhv = run_query(queries.FHV_MONTHLY_TRIPS)
 fhv["dataset"] = "FHV"
 
-combined = yellow.rename(columns={"total_trips": "trips"})
+yellow = yellow.rename(columns={"total_trips": "trips"})
 green = green.rename(columns={"total_trips": "trips"})
 fhv = fhv.rename(columns={"total_trips": "trips"})
 
-combined = combined[["pickup_month", "trips", "dataset"]]
-
-green = green[["pickup_month", "trips", "dataset"]]
-
-fhv = fhv[["pickup_month", "trips", "dataset"]]
-
-comparison_df = combined
-
-comparison_df = comparison_df._append(green, ignore_index=True)
-comparison_df = comparison_df._append(fhv, ignore_index=True)
+comparison_df = pd.concat(
+    [
+        yellow[["pickup_month", "trips", "dataset"]],
+        green[["pickup_month", "trips", "dataset"]],
+        fhv[["pickup_month", "trips", "dataset"]],
+    ],
+    ignore_index=True,
+)
 
 fig2 = px.line(
     comparison_df,
